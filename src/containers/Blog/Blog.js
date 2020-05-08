@@ -8,13 +8,14 @@ import './Blog.css';
 class Blog extends Component {
     state =  {
         posts: [],
-        selectedpostId: null
+        selectedpostId: null,
+        error: false
 
     }
 
 
     componentDidMount(){
-        axios.get('https://jsonplaceholder.typicode.com/posts')
+        axios.get('/posts')
         .then(response =>{
             console.log(response)
             let fewpost=response.data.slice(0,4);
@@ -22,8 +23,16 @@ class Blog extends Component {
             this.setState({
                 posts: updatedpost
             })
-        },reject=>{
-            console.log("rejected")
+        }
+        // ,reject=>{
+        //     console.log("rejected")
+        // }
+        )
+        .catch(error => {
+            console.log('Error',error);
+            
+            this.setState({error: true,
+                            posts: <p>ERROR WHILE FETCHING THE DATA</p>})
         });
     }
 
@@ -35,13 +44,17 @@ class Blog extends Component {
    
 
     render () {
-
-        const posts = this.state.posts.map(post => (
+        let posts = null
+        if (!this.state.error){
+        posts = this.state.posts.map(post => (
         <Post title={post.title} 
               key={post.id} 
               author={post.author}
               clicked={() => this.showselectedPost(post.id)}/>
         ))
+        }else {
+        posts = this.state.posts
+        }
 
 
 
