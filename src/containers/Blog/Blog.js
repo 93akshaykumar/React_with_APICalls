@@ -1,74 +1,50 @@
 import React, { Component } from 'react';
-import axios from 'axios' 
-import Post from '../../components/Post/Post';
-import FullPost from '../../components/FullPost/FullPost';
-import NewPost from '../../components/NewPost/NewPost';
-import './Blog.css';
+import Posts from '../../containers/Blog/Posts/Posts'
+import NewPost from '../Blog/NewPost/NewPost'
+import './Blog.css'
+import {Route,NavLink,Switch,Redirect} from 'react-router-dom'
+//import FullPost from '../Blog/FullPost/FullPost'
+import ShowError from '../../components/404_error/404_error'
+import AsyncComponent from '../../hoc/asyncComponent'
+
+// const asyncCoAsyncNewPost = AsyncComponent(()=> {
+//     return  import('../Blog/NewPost/NewPost')
+// }) 
 
 class Blog extends Component {
-    state =  {
-        posts: [],
-        selectedpostId: null,
-        error: false
-
-    }
-
-
-    componentDidMount(){
-        axios.get('/posts')
-        .then(response =>{
-            console.log(response)
-            let fewpost=response.data.slice(0,4);
-            let updatedpost=fewpost.map(post=>({...post,author: 'Akshay'}))
-            this.setState({
-                posts: updatedpost
-            })
-        }
-        // ,reject=>{
-        //     console.log("rejected")
-        // }
-        )
-        .catch(error => {
-            console.log('Error',error);
-            
-            this.setState({error: true,
-                            posts: <p>ERROR WHILE FETCHING THE DATA</p>})
-        });
-    }
-
-    showselectedPost(id){
-       this.setState({selectedpostId: id})
-       
-    }
-
    
-
     render () {
-        let posts = null
-        if (!this.state.error){
-        posts = this.state.posts.map(post => (
-        <Post title={post.title} 
-              key={post.id} 
-              author={post.author}
-              clicked={() => this.showselectedPost(post.id)}/>
-        ))
-        }else {
-        posts = this.state.posts
-        }
+        
 
 
 
         return (
-            <div>
-                <section className="Posts">
-                    {posts}
-                </section>
-                <section>
-                    <FullPost id={this.state.selectedpostId}/>
-                </section>
-                <section>
-                    <NewPost />
-                </section>
+            <div className='Blogs'>
+                <header>
+                    <nav>
+                        <ul>
+                            <li><NavLink to='/posts' exact >Home</NavLink></li>
+                            <li><NavLink to={{
+                                pathname: '/new-post',
+                                hash: '#submit',
+                                search: '?quick-submit=true'
+
+                            }} exact>New Post</NavLink></li>
+                            </ul>
+                        </nav>
+                    </header>
+                    {/* <Route path="/h1/Posts" exact render={() => <Posts />}/>
+                    <Route path="/h1" render={() => <h1>Hello</h1>}/> */}
+                    <Switch>              
+                    {/* <Route path="/new-post" exact component={NewPost}/> */}
+                    <Route path="/posts" exact component={Posts}/>
+                    
+                    <Redirect to='/posts' from='/' exact />
+
+                    {/* <Route component={ShowError}/> */}
+                    
+                    </Switch>
+                    
             </div>
         );
     }

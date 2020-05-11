@@ -7,12 +7,25 @@ class FullPost extends Component {
         showPost: null
     }
      
-    componentDidUpdate(){
-        if (this.props.id) {
-            if ( !this.state.showPost || (this.state.showPost && this.state.showPost.id !== this.props.id) ) {
+//     componentDidUpdate(prevProps,prevState) {
+//         if (this.prevProps !== this.prevState) {
+//         console.log('userId changed ');
+//      }
+//    }
+
+    Constructor(){
+        console.log("gfdhjggfhjk")
+    }
+
+    componentDidMount(){
+        console.log('component---',this.props)
+
+        if (this.props.match.params.id) {
+            if ( !this.state.showPost || (this.state.showPost && this.state.showPost.id !== this.props.match.params.id) ) {
             
-                let response = axios.get('/posts/'+this.props.id);
+                let response = axios.get('/posts/'+this.props.match.params.id);
                 response.then(response => {
+                    console.log("dataa",response.data)
                     this.setState({showPost: response.data})
                 },reject=>{
                     console.log('rejected')
@@ -23,7 +36,7 @@ class FullPost extends Component {
 
     deleteMethod= () =>{
 
-        let response = axios.delete('/posts/'+this.props.id);
+        let response = axios.delete('/posts/'+this.props.match.params.id);
         response.then(response => {
             console.log('DEleted:',response)
         },reject=>{
@@ -35,7 +48,8 @@ class FullPost extends Component {
 
     render () {
         let post = <p style={{textAlign: 'center'}}>Please select a Post!</p>;
-        if(this.props.id && this.state.showPost!=null){
+        console.log('HELLO---',this.props)
+        if(this.props.match.params.id && this.state.showPost!=null){
             post = (
                 <div className="FullPost">
                     <h1>{this.state.showPost.title}</h1>

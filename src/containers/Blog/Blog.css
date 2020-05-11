@@ -5,3 +5,30 @@
     width: 80%;
     margin: auto;
 }
+
+
+.Blogs ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.Blogs li {
+    display: inline-block;
+    margin: 20px;
+}
+.Blogs a {
+    text-decoration: none;
+    color: black;
+}
+
+.Blogs a:hover {
+    color: burlywood;
+}
+
+.Blogs a:active,
+.Blogs a.active {
+    color: cornflowerblue;
+}
+ 
